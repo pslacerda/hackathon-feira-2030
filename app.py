@@ -7,8 +7,11 @@ from apistar_pydantic import WSGIApp as App, BodyData
 
 
 class Location(BaseModel):
-    lat: int
-    lng: int
+    lat: float
+    lng: float
+
+    def __init__(self, lat: float, lng: float):
+        super().__init__(lat=lat, lng=lng)
 
 
 class Ticket(BaseModel):
@@ -18,9 +21,12 @@ class Ticket(BaseModel):
 
     text: str
     location: Location
-    happened_at: datetime
+    happened_at: datetime = None
 
     created_at: datetime
+
+    def __init__(self, **data):
+        super().__init__(created_at=datetime.now(), **data)
 
 
 class Notification(BaseModel):
@@ -29,16 +35,14 @@ class Notification(BaseModel):
 
 
 TICKETS = [
-    #
-    #     user_loc=(-12.24715, -38.9493582),
-    #     loc=(-12.24715, -38.9493582)
-    # ),
-    # Ticket(
-    #     citzen="Beltrano",
-    #     description="Algo também aconteceu!!!!!",
-    #     user_loc=(-12.25715, -38.9503582),
-    #     loc=(-12.25715, -38.9503582)
-    # ),
+    Ticket(
+        ticket_id=1,
+        citizen="Fulano",
+        citizen_location=Location(-12.24715, -38.9493582),
+        text="Algo aconteceu",
+        location=Location(-12.24715, -38.9493582),
+        hapenned_at=datetime.now()
+    )
 ]
 
 
@@ -54,7 +58,7 @@ routes = [
     Route('/tickets', 'GET', list_tickets),
     Route('/tickets', 'POST', add_ticket),
     Include('/docs', docs_urls),
-    Route('/{path}', 'GET', serve_static)
+    Route('/static/{path}', 'GET', serve_static)
 ]
 
 settings = {
