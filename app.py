@@ -14,7 +14,7 @@ class Location(BaseModel):
         super().__init__(lat=lat, lng=lng)
 
 
-class TicketCatgory(BaseModel):
+class TicketCategory(BaseModel):
     category_id: int
     name: str
     agency: str
@@ -46,13 +46,13 @@ class Notification(BaseModel):
 
 
 CATEGORIES = [
-    TicketCatgory(
+    TicketCategory(
         category_id=1,
         name="Queixa",
         agency="Delegacia",
         allow_anonymous=True
     ),
-    TicketCatgory(
+    TicketCategory(
         category_id=2,
         name="Soliciar Ambulância",
         agency="Hospital",
@@ -82,7 +82,7 @@ def add_ticket(ticket: BodyData[Ticket]) -> int:
     return TICKETS.index(ticket)
 
 
-def list_categories() -> List[TicketCatgory]:
+def list_categories() -> List[TicketCategory]:
     return CATEGORIES
 
 
